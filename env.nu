@@ -17,6 +17,6 @@
 # You can remove these comments if you want or leave
 # them for future reference.
 
-$env.XDG_CONFIG_HOME = ($nu.home-path | path join ".config")
+$env.XDG_CONFIG_HOME = ("~" | path expand | path join ".config")
 $env.EDITOR = "nvim"
 $env.VISUAL = "nvim"
