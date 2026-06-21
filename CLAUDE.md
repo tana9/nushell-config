@@ -1,36 +1,36 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、リポジトリのコードを扱う際に Claude Code (claude.ai/code) へのガイダンスを提供します。
 
-## What this is
+## 概要
 
-Nushell configuration directory on Windows. Changes to `config.nu` or `env.nu` take effect fully only in a new shell session (partial reload via `source` is incomplete because `env.nu` runs before `config.nu`).
+Windows 上の Nushell 設定ディレクトリ。`config.nu` や `env.nu` への変更は、新しいシェルセッションを開いて初めて完全に反映される（`source` による部分的なリロードは不完全。`env.nu` が `config.nu` より先に実行されるため）。
 
-## Key commands
+## 主なコマンド
 
 ```nushell
-config nu          # open config.nu in default editor
-config nu --doc | nu-highlight | more      # browse all config options with docs
-$nu.config-path    # print path to config.nu
-$nu.env-path       # print path to env.nu
+config nu          # config.nu をデフォルトエディタで開く
+config nu --doc | nu-highlight | less -R   # すべての設定オプションをドキュメント付きで閲覧
+$nu.config-path    # config.nu のパスを表示
+$nu.env-path       # env.nu のパスを表示
 ```
 
-## File structure
+## ファイル構成
 
-| File | Purpose |
-|------|---------|
-| `config.nu` | Main settings: history (SQLite, 100k lines, isolation), OSC133 disabled |
-| `env.nu` | Env vars set before config.nu: `TERM`, `XDG_DATA_HOME` |
-| `autoload/yazi.nu` | `y` command — launches yazi and changes to its final directory |
-| `vendor/autoload/starship.nu` | Starship prompt (managed by starship, via Scoop) |
-| `vendor/autoload/.zoxide.nu` | `z`/`zi` aliases for zoxide directory jumping |
+| ファイル | 役割 |
+|----------|------|
+| `config.nu` | メイン設定: 履歴 (SQLite、10万行、分離)、OSC133 無効 |
+| `env.nu` | config.nu より前に設定される環境変数: `XDG_CONFIG_HOME`、`EDITOR` |
+| `autoload/yazi.nu` | `y` コマンド — yazi を起動し、最後にいたディレクトリへ移動 |
+| `vendor/autoload/starship.nu` | Starship プロンプト (starship が管理、Scoop 経由) |
+| `vendor/autoload/.zoxide.nu` | zoxide のディレクトリジャンプ用 `z`/`zi` エイリアス |
 
-## Conventions
+## 規約
 
-- **`autoload/`** — user-managed scripts, safe to add/edit. Sourced automatically at startup.
-- **`vendor/autoload/`** — tool-generated files. Do not edit manually; regenerate with the owning tool (e.g., `starship init nu`, `zoxide init nushell`).
-- Tools (starship, zoxide, yazi) are installed via Scoop.
+- **`autoload/`** — ユーザー管理のスクリプト置き場。追加・編集して問題ない。起動時に自動で source される。
+- **`vendor/autoload/`** — ツールが生成したファイル。手動で編集しないこと。ツール本体で再生成する（例: `starship init nu`、`zoxide init nushell`）。
+- ツール (starship、zoxide、yazi) は Scoop でインストール。
 
-## Adding new integrations
+## 新しいツールの統合
 
-Drop a `.nu` file in `autoload/` and it will be sourced at startup. For new tools that provide their own init scripts (like zoxide or starship), place generated output in `vendor/autoload/` instead.
+`.nu` ファイルを `autoload/` に置くだけで起動時に自動 source される。zoxide や starship のように独自の init スクリプトを持つツールは、生成した出力を `vendor/autoload/` に置くこと。
